@@ -1,0 +1,42 @@
+Breakout Plan
+
+Overview:
+For my Breakout game, I intend to implement a two-player Pong-like game. There will be two paddles located on 
+either side of the screen (left and right), one controlled by the arrow pad, and the other controlled by WASD
+on the keyboard. There will be a set of bricks separating the two paddles, and the one ball will start on either
+side of the bricks (two balls total). The objective of the game will be to have the ball pass the opponents paddle
+prior to having it pass by your own. This can either happen while trying to clear the bricks or by hitting a ball
+past the opponent.
+
+Levels:
+The game will be a best of three (first player to win two rounds is the overall winner). The levels will increase
+in difficulty by adding a greater probability for the appearance of blocks that survive multiple hits, greater
+probablility of power bricks, and the number of rows will increase so that there is less space between the paddle and bricks.
+
+Blocks:
+Plain blocks - typical one hit elimination blocks
+Tough blocks - require multiple hits to be eliminated
+Power blocks - these blocks drop power-ups which can be picked up by the user at their discretion
+
+Paddle:
+Size increase/decrease - the paddle size will either increase of decrease depending on the power-up
+Catch and Release - the paddle will catch the ball and then be released straight up when a player presses a 
+certain key (this is obtained through use of a cheat code)
+Redirecting - hitting on the outside thirds of the paddle will send the ball back where it came from
+
+Power-Ups:
+Increased/decreased block size
+Increased/decreased ball speed
+Invisible bricks - makes all bricks invisible to both players
+Added ball - adds another ball to the game
+
+Cheat keys:
+1/0 - initiates Catch and Release (1 for player 1, 0 for player 2)
+2/9 - paddle takes up the entire side (invisible)
+5 - increase ball speed
+
+
+Something extra:
+My something extra is the two-player element of the game. Rather than the typical breakout game which is 
+just the user against the bricks, this game will build off of that by incorporating another player into it to give
+a new competetive edge.
