@@ -237,9 +237,8 @@ public class Breakout extends Application{
 		return false;
 	}
 
-
+	//checks for intersection between bouncers and paddles
 	private void checkForPaddleCollisions() {
-		//checks for intersection between bouncers and paddles
 		for (int x=0; x<bouncers.size(); x++) {
 			for (int y=0; y<paddles.size(); y++) {
 				boolean x_overlap = (bouncers.get(x).getX() + bouncerWidth >= paddles.get(y).getX()) && (bouncers.get(x).getX() <= paddles.get(y).getX() + paddles.get(y).getWidth());
@@ -263,9 +262,8 @@ public class Breakout extends Application{
 			}
 		}
 	}
-	
+	//checks for intersection between bouncers and bricks
 	private void checkForBrickCollisions() {
-		//checks for intersection between bouncers and bricks
 		for (int x=0; x<bouncers.size(); x++) {
 			for (int y=0; y<bricks.size(); y++) {
 				boolean x_overlap = bouncers.get(x).getX() + bouncerWidth >= bricks.get(y).getX() && bouncers.get(x).getX() <= bricks.get(y).getX() + BRICK_WIDTH;
@@ -276,7 +274,7 @@ public class Breakout extends Application{
 			}
 		}
 	}
-
+	//check if falling powerUp has hit a brick
 	private void checkForPowerCollisions() {
 		for (int x=0; x<powerUps.size(); x++) {
 			for (int y=0; y<paddles.size(); y++) {
@@ -448,19 +446,37 @@ public class Breakout extends Application{
 			}
 		}
 		else if (code == KeyCode.E) {
-			root.getChildren().remove(paddle1.getRect());
-			paddles.remove(paddle1);
-			paddle1 = new Paddle(1, paddle1.getX(), 0 , HEIGHT, paddle1.getWidth(), paddle1.getSpeed(), paddle1.getColor());
-			root.getChildren().add(paddle1.getRect());
-			paddles.add(paddle1);
+			if(paddle1.getLength() == HEIGHT) { //shrink paddle back down
+				root.getChildren().remove(paddle1.getRect());
+				paddles.remove(paddle1);
+				paddle1 = new Paddle(2, paddle1.getX(), HEIGHT/2 - PADDLE_HEIGHT/2 , PADDLE_HEIGHT, paddle1.getWidth(), paddle1.getSpeed(), paddle1.getColor());
+				root.getChildren().add(paddle1.getRect());
+				paddles.add(paddle1);
+			}
+			else {
+				root.getChildren().remove(paddle1.getRect());
+				paddles.remove(paddle1);
+				paddle1 = new Paddle(1, paddle1.getX(), 0 , HEIGHT, paddle1.getWidth(), paddle1.getSpeed(), paddle1.getColor());
+				root.getChildren().add(paddle1.getRect());
+				paddles.add(paddle1);
+			}
 		}
 		
 		else if (code == KeyCode.O) {
-			root.getChildren().remove(paddle2.getRect());
-			paddles.remove(paddle2);
-			paddle2 = new Paddle(2, paddle2.getX(), 0 , HEIGHT, paddle2.getWidth(), paddle2.getSpeed(), paddle2.getColor());
-			root.getChildren().add(paddle2.getRect());
-			paddles.add(paddle2);
+			if(paddle2.getLength() == HEIGHT) { //shrink paddle back down
+				root.getChildren().remove(paddle2.getRect());
+				paddles.remove(paddle2);
+				paddle2 = new Paddle(2, paddle2.getX(), HEIGHT/2 - PADDLE_HEIGHT/2 , PADDLE_HEIGHT, paddle2.getWidth(), paddle2.getSpeed(), paddle2.getColor());
+				root.getChildren().add(paddle2.getRect());
+				paddles.add(paddle2);
+			}
+			else{
+				root.getChildren().remove(paddle2.getRect());
+				paddles.remove(paddle2);
+				paddle2 = new Paddle(2, paddle2.getX(), 0 , HEIGHT, paddle2.getWidth(), paddle2.getSpeed(), paddle2.getColor());
+				root.getChildren().add(paddle2.getRect());
+				paddles.add(paddle2);
+			}
 		}
 	}
 
@@ -468,12 +484,12 @@ public class Breakout extends Application{
 	private void paddleCollision (Bouncer b, Paddle p) {
 		b.setMyLastHit(p.getPlayer());
 		//if the ball hits one of the outer thirds of the paddle redirect it back where it came from
-		if (b.getY() >= p.getY() + p.getLength()/3 || b.getY() <= p.getY() + 2*p.getLength()/3) {
+		if (b.getY() <= p.getY() + p.getLength()/3 || b.getY() >= p.getY() + 2*p.getLength()/3) {
 			b.setXSpeed(-1*b.getXSpeed());
 			b.setYSpeed(-1*b.getYSpeed());
 		}
 		//if the ball hits the middle third of the paddle continue in same y-direction
-		else if (b.getY() > p.getY() + p.getLength()/3 && b.getY() < p.getY() + 2*p.getLength()/3) {
+		else {
 			b.setXSpeed(-1*b.getXSpeed());
 		}
 	}
