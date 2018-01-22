@@ -6,12 +6,12 @@ either side of the screen (left and right), one controlled by the arrow pad, and
 on the keyboard. There will be a set of bricks separating the two paddles, and the one ball will start on either
 side of the bricks (two balls total). The objective of the game will be to have the ball pass the opponents paddle
 prior to having it pass by your own. This can either happen while trying to clear the bricks or by hitting a ball
-past the opponent.
+past the opponent. First player to win two games wins the match.
 
 Levels:
 The game will be a best of three (first player to win two rounds is the overall winner). The levels will increase
 in difficulty by adding a greater probability for the appearance of blocks that survive multiple hits, greater
-probablility of power bricks, and the number of rows will increase so that there is less space between the paddle and bricks.
+probability of power bricks, and the number of rows will increase so that there is less space between the paddle and bricks.
 
 Blocks:
 Plain blocks - typical one hit elimination blocks
@@ -21,22 +21,24 @@ Power blocks - these blocks drop power-ups which can be picked up by the user at
 Paddle:
 Size increase/decrease - the paddle size will either increase of decrease depending on the power-up
 Catch and Release - the paddle will catch the ball and then be released straight up when a player presses a 
-certain key (this is obtained through use of a cheat code)
+						certain key (this is obtained through use of a cheat code)
 Redirecting - hitting on the outside thirds of the paddle will send the ball back where it came from
 
 Power-Ups:
 Increased/decreased block size
 Increased/decreased ball speed
-Invisible bricks - makes all bricks invisible to both players
 Added ball - adds another ball to the game
 
 Cheat keys:
-1/0 - initiates Catch and Release (1 for player 1, 0 for player 2)
-2/9 - paddle takes up the entire side (invisible)
-5 - increase ball speed
-
+Q/P - initiates Catch and Release (Q for player 1, P for player 2)
+E/O - paddle takes up the entire side (invincible)
+SPACE - increase ball speed
 
 Something extra:
 My something extra is the two-player element of the game. Rather than the typical breakout game which is 
 just the user against the bricks, this game will build off of that by incorporating another player into it to give
-a new competetive edge.
+a new competitive edge.
+
+EDIT: I removed the invisible bricks power-up. My "tough bricks" which require multiple hits prior to breaking change color as their remaining hits decreases,
+and I could not figure out a way to maintain this feature while integrating the invisible bricks feature since the bricks would all be invisible and then upon
+being hit would change color.
