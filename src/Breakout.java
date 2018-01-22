@@ -108,10 +108,12 @@ public class Breakout extends Application{
 		Text cheats = new Text(WIDTH/2 + 50, HEIGHT/2, "Cheat Codes: \nQ/P - initiates Catch and Release (Q for player 1, P for player 2)\n" + 
 				"E/O - paddle takes up the entire side (invincible)\n" + 
 				"SPACE - increase ball speed");
+		Text cont = new Text(WIDTH/2 -120, HEIGHT/2 + 130, "Click to continue!");
 		startGroup.getChildren().add(welcome);
 		startGroup.getChildren().add(powers);
 		startGroup.getChildren().add(bricks);
 		startGroup.getChildren().add(cheats);
+		startGroup.getChildren().add(cont);
 	}
 	
 	private void setupGame() {
