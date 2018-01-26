@@ -35,7 +35,7 @@ public class Breakout extends Application{
 	public static final String BOUNCER_IMAGE = "ball.gif";
 	public static final double INITIAL_SPEED = 100.0;
 	public static final double PADDLE_SPEED = 20.0;
-	public static final double POWER_SPEED = 50.0;
+	//public static final double POWER_SPEED = 50.0;
 	
 	private Stage myStage = new Stage();
 	private Group root = new Group();
@@ -161,8 +161,8 @@ public class Breakout extends Application{
         bouncers = getBouncers(bouncerImage, bouncerWidth, bouncerHeight, bouncers);
 		
 		//add bouncers to group
-		root.getChildren().add(bouncers.get(0).getImage());
-		root.getChildren().add(bouncers.get(1).getImage());
+		root.getChildren().add(bouncers.get(0).getImageView());
+		root.getChildren().add(bouncers.get(1).getImageView());
 		
 		//display scores
 		score1 = new Text(WIDTH/4 - 100, HEIGHT - 50, "Player 1 score: " + p1Score);
@@ -181,7 +181,14 @@ public class Breakout extends Application{
 	private void mainStep (double elapsedTime) {
 		moveBalls(elapsedTime); //move balls and bounce off walls
 		checkForPaddleCollisions(); //check if ball hits paddle -- call paddleCollision()
-		checkForBrickCollisions(); //check if ball hits brick -- call brickCollision()
+		for (Brick b: bricks) {
+			if (b.checkForCollision(bouncers)) {
+				root.getChildren().remove(b.getBrick());
+				bricks.remove(b);
+				break;
+			}
+		}
+		//checkForBrickCollisions(); //check if ball hits brick -- call brickCollision()
 		checkForPowerCollisions(); //check if power-up hits paddle
 		movePowerUps(elapsedTime);
 		if (checkForWin()) { //check to see if a ball has gone off the screen
@@ -189,7 +196,7 @@ public class Breakout extends Application{
 			for (Paddle p: paddles) 
 				root.getChildren().remove(p.getRect());
 			for (Bouncer b: bouncers)
-				root.getChildren().remove(b.getImage());
+				root.getChildren().remove(b.getImageView());
 			for (Brick b: bricks)
 				root.getChildren().remove(b.getBrick());
 			for (Power p: powerUps)
@@ -265,17 +272,17 @@ public class Breakout extends Application{
 		}
 	}
 	//checks for intersection between bouncers and bricks
-	private void checkForBrickCollisions() {
-		for (int x=0; x<bouncers.size(); x++) {
-			for (int y=0; y<bricks.size(); y++) {
-				boolean x_overlap = bouncers.get(x).getX() + bouncerWidth >= bricks.get(y).getX() && bouncers.get(x).getX() <= bricks.get(y).getX() + BRICK_WIDTH;
-				boolean y_overlap = bouncers.get(x).getY() >= bricks.get(y).getY() && bouncers.get(x).getY() <= bricks.get(y).getY() + BRICK_LENGTH;
-				if (x_overlap && y_overlap) {
-					brickCollision(bouncers.get(x), bricks.get(y));
-				}
-			}
-		}
-	}
+//	private void checkForBrickCollisions() {
+//		for (int x=0; x<bouncers.size(); x++) {
+//			for (int y=0; y<bricks.size(); y++) {
+//				boolean x_overlap = bouncers.get(x).getX() + bouncerWidth >= bricks.get(y).getX() && bouncers.get(x).getX() <= bricks.get(y).getX() + BRICK_WIDTH;
+//				boolean y_overlap = bouncers.get(x).getY() + bouncerHeight >= bricks.get(y).getY() && bouncers.get(x).getY() <= bricks.get(y).getY() + BRICK_LENGTH;
+//				if (x_overlap && y_overlap) {
+//					brickCollision(bouncers.get(x), bricks.get(y));
+//				}
+//			}
+//		}
+//	}
 	//check if falling powerUp has hit a brick
 	private void checkForPowerCollisions() {
 		for (int x=0; x<powerUps.size(); x++) {
@@ -328,17 +335,6 @@ public class Breakout extends Application{
 			power.getBouncer().setXSpeed(.3*power.getBouncer().getXSpeed());
 			power.getBouncer().setYSpeed(.3*power.getBouncer().getYSpeed());
 		}
-		//removed invisible brick power up b/c it interfered with having specific brick colors for number of hits left
-//		if (power.getPowerUp().equals("invisible")) {
-//			for (int x=0; x<bricks.size(); x++) {
-//				root.getChildren().remove(bricks.get(x).getBrick());
-//				Brick b = new Brick(bricks.get(x).getX(), bricks.get(x).getY(), BRICK_LENGTH, BRICK_WIDTH, 
-//						POWER_UP_PERCENTAGE, TOUGH_BRICKS_PERCENTAGE);
-//				bricks.remove(x);
-//				bricks.add(x, b);
-//				root.getChildren().add(bricks.get(x).getBrick());
-//			}
-//		}
 		powerUps.remove(power);
 		root.getChildren().remove(power.getImageView());
 	}
@@ -498,38 +494,42 @@ public class Breakout extends Application{
 	
 	//handle collisions between ball and brick
 	//remove brick/reduce num hits left
-	private void brickCollision (Bouncer b, Brick brick) {
-		b.setXSpeed(-1*b.getXSpeed());
-		if (brick.getColor().equals(Color.DARKGREEN)) { // if it is a power brick
-			Power p = new Power(b.getMyLastHit(), brick.getX(), brick.getY(), POWER_SPEED, b);
-			if (p.getPowerUp().equals("addBall")){ //handle addBall here since no power icon is dropped
-				Bouncer bounce = new Bouncer (new Image(BOUNCER_IMAGE), b.getX(), b.getY(), bouncerWidth, bouncerHeight, b.getMyLastHit(), -1*b.getXSpeed(), false);
-				bouncers.add(bounce);
-				root.getChildren().add(bounce.getImage());
-			}
-			else{
-				powerUps.add(p);
-				root.getChildren().add(p.getImageView()); //adding the last element of the arrayList (new power-up) to group
-			}
-				
-		}
-		brick.setHits(brick.getHits() - 1);
-		if (brick.getHits() == 0) {
-			bricks.remove(brick);
-			root.getChildren().remove(brick.getBrick());
-		}
-		brick.setColor(brick.getHitColor(brick.getHits()));
-	}
+//	private void brickCollision (Bouncer b, Brick brick) {
+//		b.setXSpeed(-1*b.getXSpeed());
+//		if (brick.getColor().equals(Color.DARKGREEN)) { // if it is a power brick
+//			Power p = new Power(b.getMyLastHit(), brick.getX(), brick.getY(), b);
+//			if (p.getPowerUp().equals("addBall")){ //handle addBall here since no power icon is dropped
+//				Bouncer bounce = new Bouncer (new Image(BOUNCER_IMAGE), b.getX(), b.getY(), bouncerWidth, bouncerHeight, b.getMyLastHit(), -1*b.getXSpeed(), false);
+//				bouncers.add(bounce);
+//				root.getChildren().add(bounce.getImageView());
+//			}
+//			else{
+//				powerUps.add(p);
+//				root.getChildren().add(p.getImageView()); //adding the last element of the arrayList (new power-up) to group
+//			}
+//				
+//		}
+//		brick.setHits(brick.getHits() - 1);
+//		if (brick.getHits() == 0) {
+//			bricks.remove(brick);
+//			root.getChildren().remove(brick.getBrick());
+//		}
+//		brick.setColor(brick.getHitColor(brick.getHits()));
+//	}
 	
 	//adding bricks to ArrayList of bricks -- power/tough bricks set in brick class
 	private ArrayList<Brick> getBrickArrayList(ArrayList<Brick> bricks, int level) {
 			for (int col=1; col<=level*2; col++) {
 				for(int row=0; row<HEIGHT/BRICK_LENGTH - 1; row++) {
-					//x location of the brick -> function of level (determines how many columns there are)
+					double rand = Math.random();
 					double xloc = WIDTH/2 - PADDLE_WIDTH + (col-level)*PADDLE_WIDTH;
-					//y location of the brick -> function of brickLength and how row (how many bricks are already in column)
 					double yloc = (BRICK_LENGTH+BRICK_SEPARATION)*row;
-					bricks.add(new Brick(xloc, yloc, BRICK_LENGTH, BRICK_WIDTH, POWER_UP_PERCENTAGE*level, TOUGH_BRICKS_PERCENTAGE*level));
+					if (rand < POWER_UP_PERCENTAGE*level) {
+						bricks.add(new PowerBrick(xloc, yloc, BRICK_LENGTH, BRICK_WIDTH));
+					}
+					else {
+						bricks.add(new ToughBrick(xloc, yloc, BRICK_LENGTH, BRICK_WIDTH, rand));
+					}
 				}
 			}
 			return bricks;

@@ -3,7 +3,8 @@ import javafx.scene.image.ImageView;
 
 public class Bouncer {
 
-	private ImageView myImage;
+	private ImageView myImageView;
+	private Image myImage;
 	private double myXSpeed;
 	private double myYSpeed;
 	private double myXLoc;
@@ -13,7 +14,8 @@ public class Bouncer {
 	
 	//lastHit indicates which paddle hit the ball last so that power-ups will fall in the correct direction
 	public Bouncer(Image image, double xloc, double yloc, double imageHeight, double imageWidth, int lastHit, double initialSpeed, boolean caught) {
-		myImage = new ImageView(image);
+		myImage = image;
+		myImageView = new ImageView(image);
 		myXLoc = xloc;
 		myYLoc = yloc;
 		setX(xloc);
@@ -29,8 +31,12 @@ public class Bouncer {
 		myYSpeed = Math.rint((Math.random()+1))*-1*initialSpeed*Math.random();
 	}
 
-	public ImageView getImage() {
+	public Image getImage() {
 		return myImage; 
+	}
+	
+	public ImageView getImageView() {
+		return myImageView; 
 	}
 
 	public double getXSpeed() {
@@ -50,19 +56,19 @@ public class Bouncer {
 	}
 
 	public void setX(double x) {
-		myImage.setX(x);
+		myImageView.setX(x);
 	}
 
 	public void setY(double y) {
-		myImage.setY(y);
+		myImageView.setY(y);
 	}
 
 	public double getX() {
-		return myImage.getX();
+		return myImageView.getX();
 	}
 
 	public double getY() {
-		return myImage.getY();
+		return myImageView.getY();
 	}
 	
 	public int getMyLastHit() {
